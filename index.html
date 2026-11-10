@@ -1,14 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ALA Homestay - Quản Lý Tự Động</title>
-    <!-- Thêm Tailwind CSS CDN để hiển thị đầy đủ giao diện -->
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-slate-950 text-slate-100">
-    <div id="root"></div>
-    <script type="module" src="/src/App.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALA Homestay - Quản Lý Tự Động</title>
+  <!-- Nạp Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Nạp React & ReactDOM qua CDN để chạy trực tiếp mượt mà -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans">
+  <div id="root"></div>
+
+  <!-- Nhúng trực tiếp ứng dụng Homestay vào file HTML để chạy luôn không cần build phức tạp -->
+  <script type="text/babel">
+    function HomestayApp() {
+      const [rooms] = React.useState([
+        { id: 'ala11', name: 'ALA 11 (Gò Vấp) 101', status: 'vacant', guest: '', phone: '', pin: '829102', wifi: 'ALA_11 / pass1234', revenue: 10151 },
+        { id: 'ala12', name: 'ALA 12 (Gò Vấp) 302', status: 'occupied', guest: 'Nguyễn Văn A', phone: '0901234567', pin: '492018', wifi: 'ALA_12 / pass1234', revenue: 11839 },
+        { id: 'ala13', name: 'ALA 13 (Gò Vấp) 201', status: 'vacant', guest: '', phone: '', pin: '519203', wifi: 'ALA_13 / pass1234', revenue: 8423 },
+        { id: 'ala14', name: 'ALA 14 (Gò Vấp) 202', status: 'cleaning', guest: '', phone: '', pin: '730192', wifi: 'ALA_14 / pass1234', revenue: 11455 },
+        { id: 'ala15', name: 'ALA 15 (Gò Vấp) 301', status: 'vacant', guest: '', phone: '', pin: '381920', wifi: 'ALA_15 / pass1234', revenue: 6405 },
+      ]);
+
+      const totalRevenue = rooms.reduce((acc, r) => acc + r.revenue, 0);
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 p-6">
+          <header className="flex flex-wrap justify-between items-center mb-8 border-b border-slate-800 pb-4">
+            <div>
+              <h1 className="text-2xl font-bold text-blue-400">ALA Homestay - Quản Lý Tự Động</h1>
+              <p className="text-sm text-slate-400">Hệ thống quản lý 5 phòng (ALA 11 đến ALA 15) - Gò Vấp</p>
+            </div>
+            <div className="bg-slate-900 px-4 py-2 rounded-xl border border-slate-800 mt-3 md:mt-0">
+              <span className="text-xs text-slate-400 block">Tổng doanh thu hệ thống:</span>
+              <span className="text-xl font-bold text-emerald-400">{totalRevenue.toLocaleString()} VNĐ</span>
+            </div>
+          </header>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {rooms.map((room) => (
+              <div key={room.id} className="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-white text-base">{room.name}</span>
+                    <span className={`px-2 py-0.5 rounded text-xs font-bold ${
+                      room.status === 'occupied' ? 'bg-amber-500/20 text-amber-400' :
+                      room.status === 'cleaning' ? 'bg-yellow-500/20 text-yellow-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}>
+                      {room.status === 'occupied' ? 'Đang ở' : room.status === 'cleaning' ? 'Dọn dẹp' : 'Trống'}
+                    </span>
+                  </div>
+                  <div className="space-y-1 text-xs text-slate-300 mt-3">
+                    <p><strong>Khách:</strong> {room.guest || 'Chưa có'}</p>
+                    <p><strong>Mã PIN cửa:</strong> <span className="text-blue-400 font-mono font-bold">{room.pin}</span></p>
+                    <p className="text-slate-400 truncate"><strong>Wifi:</strong> {room.wifi}</p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Doanh thu:</span>
+                  <span className="text-emerald-400 font-bold">{room.revenue.toLocaleString()} đ</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<HomestayApp />);
+  </script>
+</body>
 </html>
